@@ -1,0 +1,24 @@
+[package]
+name = "freeways_launcher"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# UI with iced
+iced = {version = "0.3", features = ["smol"]}
+iced_futures = "0.3.0"
+iced_native = "0.4.0"
+
+# Other Stuff
+image = {version = "0.23.14", default-features = false, features = ["ico"]}
+simple_config_parser = "0.1.6"
+msgbox = "0.6.1"
+home = "0.5.3"
+
+[build-dependencies]
+chrono = "0.4.19"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.11"
