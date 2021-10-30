@@ -15,7 +15,7 @@ pub const VERSION: &str = "α0.1.0";
 pub const CFG_PATH: &str = ".freeways_launcher/config.cfg";
 
 pub fn main() -> iced::Result {
-    println!("[*] Freeways Launch [{}]", VERSION);
+    println!("[*] Freeways Launcher [{}]", VERSION);
 
     // Set Panic Handler
     panic::set_hook(Box::new(|p| {
@@ -54,6 +54,8 @@ pub fn main() -> iced::Result {
 }
 
 // TODO:
+
+// ✅ Config Saveing
 
 // Allow picking between diffrent worlds
 // Allow makeing new worlds

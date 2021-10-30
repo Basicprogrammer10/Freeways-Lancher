@@ -6,9 +6,13 @@ use std::path::PathBuf;
 
 use simple_config_parser::config;
 
+use crate::VERSION;
+
 #[derive(Debug, Clone)]
 pub struct Config {
     pub game_path: PathBuf,
+
+    // Game Settings
     pub volume: u8,
     pub full_screen: bool,
 }
@@ -17,6 +21,7 @@ pub struct Config {
 pub enum ConfigUpdate {
     Volume(u8),
     FullScreen(bool),
+    GamePath(String),
 }
 
 impl Config {
@@ -45,7 +50,7 @@ impl Config {
 
         Some(Config {
             game_path: Path::new(&game_path).to_path_buf(),
-            volume: game_config_data.clone().nth(7).unwrap().parse().unwrap(),
+            volume: game_config_data.clone().nth(7).unwrap().parse().ok()?,
             full_screen: game_config_data.nth(1).unwrap() == "true",
             ..Config::default()
         })
@@ -57,11 +62,31 @@ impl Config {
                 volume,
                 ..self.clone()
             },
+
             ConfigUpdate::FullScreen(full_screen) => Config {
                 full_screen,
                 ..self.clone()
             },
+
+            ConfigUpdate::GamePath(game_path) => Config {
+                game_path: Path::new(&game_path).to_path_buf(),
+                ..self.clone()
+            },
         }
+    }
+
+    pub fn save(&self, path: PathBuf) {
+        fs::create_dir_all(path.parent().unwrap()).unwrap();
+
+        fs::write(
+            path,
+            format!(
+                "; Freeways-Launcher V{} Config\ngame_path = {}\n",
+                VERSION,
+                self.game_path.to_string_lossy()
+            ),
+        )
+        .unwrap();
     }
 }
 
