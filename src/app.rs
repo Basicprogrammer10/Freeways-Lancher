@@ -58,17 +58,21 @@ impl Application for App {
     fn new(_flags: ()) -> (App, Command<Message>) {
         let config_path = home_dir().unwrap().join(Path::new(CFG_PATH));
 
-        println!(
-            "[*] Checking Data Dir ({})",
-            config_path.parent().unwrap().to_string_lossy()
-        );
+        print!("[*] Checking Data Dir ({}) ", config_path.to_string_lossy());
+        match config::check_data_dir(config_path.clone()) {
+            Some(_) => println!("[✅]"),
+            None => println!("[❌]"),
+        }
 
-        print!("[*] Loading Config ({}) ", config_path.to_string_lossy());
-        let config = config::Config::load(config_path);
+        print!(
+            "[*] Loading Config ({}) ",
+            config_path.join("config.cfg").to_string_lossy()
+        );
+        let config = config::Config::load(config_path.join("config.cfg"));
 
         let app = match config {
             Some(config) => {
-                println!("✅");
+                println!("[✅]");
                 App {
                     config,
                     ..Default::default()
@@ -125,7 +129,7 @@ impl Application for App {
                     self.config.game_path.to_string_lossy()
                 );
                 self.config
-                    .save(home_dir().unwrap().join(Path::new(CFG_PATH)));
+                    .save(home_dir().unwrap().join(Path::new(CFG_PATH)).join("config.cfg"));
                 self.view = View::Main;
             }
 

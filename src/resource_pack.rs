@@ -68,3 +68,30 @@ impl fmt::Debug for ResourcePack {
             .finish()
     }
 }
+
+// Extract a Pack
+
+// let pack = resource_pack::ResourcePack::load(
+//     Path::new(r#"V:\Software\SteamLibrary\steamapps\common\Freeways\data\default.tar"#)
+//         .to_path_buf(),
+// )
+// .unwrap();
+//
+// println!("Pack: {:?}", pack);
+//
+// for i in pack.files {
+//     if i.name.ends_with('/') || i.name.ends_with('\\') {
+//         continue;
+//     }
+//
+//     if i.name.starts_with("assets") {
+//         println!("Writeing: {}", i.name.clone());
+//
+//         fs::write(
+//             Path::new(r#"V:\Software\SteamLibrary\steamapps\common\Freeways\data\"#)
+//                 .join(Path::new(&i.name).file_name().unwrap()),
+//             i.data,
+//         )
+//         .unwrap();
+//     }
+// }
