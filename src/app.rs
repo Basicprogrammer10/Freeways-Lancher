@@ -5,8 +5,9 @@ use std::process;
 
 use home::home_dir;
 use iced::{
-    button, executor, slider, text_input, time, Align, Application, Button, Checkbox, Clipboard,
-    Color, Column, Command, Container, Element, Length, Radio, Row, Slider, Text, TextInput,
+    button, executor, image::Handle, slider, text_input, time, Align, Application, Button,
+    Checkbox, Clipboard, Color, Column, Command, Container, Element, Image, Length, Radio, Row,
+    Slider, Space, Text, TextInput,
 };
 
 use crate::config;
@@ -128,8 +129,12 @@ impl Application for App {
                     "[*] Saveing Config (GamePath: '{}')",
                     self.config.game_path.to_string_lossy()
                 );
-                self.config
-                    .save(home_dir().unwrap().join(Path::new(CFG_PATH)).join("config.cfg"));
+                self.config.save(
+                    home_dir()
+                        .unwrap()
+                        .join(Path::new(CFG_PATH))
+                        .join("config.cfg"),
+                );
                 self.view = View::Main;
             }
 
@@ -157,8 +162,9 @@ impl Application for App {
             View::Main => Container::new(
                 Column::new()
                     .align_items(Align::Center)
-                    .padding(20)
+                    .padding(25)
                     .push(Text::new(format!("Freeways Launcher {}", VERSION)).size(45))
+                    .push(Space::with_height(Length::Units(25)))
                     .push(
                         Row::new()
                             .spacing(20)
@@ -196,16 +202,34 @@ impl Application for App {
                             ),
                     )
                     .push(
-                        Button::new(&mut self.settings_button, Text::new("Settings").size(25))
-                            .style(self.theme)
-                            .on_press(Message::OpenSettings),
-                    )
-                    .push(
-                        Row::new().push(
-                            Button::new(&mut self.launch_button, Text::new("Launch!").size(50))
-                                .on_press(Message::Launch)
-                                .style(self.theme),
+                        Row::new().spacing(10).push(
+                            Text::new("Resource Pack")
+                                .size(25)
+                                .width(Length::FillPortion(1)),
                         ),
+                    )
+                    .push(Space::new(Length::Fill, Length::Fill))
+                    .push(
+                        Row::new()
+                            .height(Length::Shrink)
+                            .spacing(10)
+                            .push(Space::with_width(Length::Fill))
+                            .push(
+                                Button::new(
+                                    &mut self.settings_button,
+                                    Image::new(Handle::from_memory(
+                                        crate::assets::SETTINGS_BUTTON.to_vec(),
+                                    ))
+                                    .height(Length::Units(50)),
+                                )
+                                .style(self.theme)
+                                .on_press(Message::OpenSettings),
+                            )
+                            .push(
+                                Button::new(&mut self.launch_button, Text::new("Launch!").size(50))
+                                    .on_press(Message::Launch)
+                                    .style(self.theme),
+                            ),
                     ),
             )
             .width(Length::Fill)
@@ -237,6 +261,7 @@ impl Application for App {
                                 .style(self.theme),
                             ),
                     )
+                    .push(Space::new(Length::Fill, Length::Fill))
                     .push(
                         Row::new()
                             .spacing(10)

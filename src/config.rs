@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use simple_config_parser::config;
-use tar::Archive;
+use tar;
 
 use crate::VERSION;
 
