@@ -58,6 +58,11 @@ impl Application for App {
     fn new(_flags: ()) -> (App, Command<Message>) {
         let config_path = home_dir().unwrap().join(Path::new(CFG_PATH));
 
+        println!(
+            "[*] Checking Data Dir ({})",
+            config_path.parent().unwrap().to_string_lossy()
+        );
+
         print!("[*] Loading Config ({}) ", config_path.to_string_lossy());
         let config = config::Config::load(config_path);
 

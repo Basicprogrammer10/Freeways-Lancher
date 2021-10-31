@@ -26,21 +26,12 @@ pub enum ConfigUpdate {
 
 impl Config {
     pub fn load(path: PathBuf) -> Option<Config> {
-        let mut file = match OpenOptions::new().read(true).open(path) {
-            Ok(file) => file,
-            Err(_) => return None,
-        };
+        let mut file = OpenOptions::new().read(true).open(path).ok()?;
         let mut data = String::new();
-        match file.read_to_string(&mut data) {
-            Ok(_) => (),
-            Err(_) => return None,
-        };
+        file.read_to_string(&mut data).ok()?;
 
         let mut cfg = config::Config::new(None);
-        match cfg.parse(&data.replace('\r', "")) {
-            Ok(_) => {}
-            Err(_) => return None,
-        }
+        cfg.parse(&data.replace('\r', "")).ok()?;
 
         let game_path = cfg.get("game_path")?;
 
